@@ -1,43 +1,29 @@
 import React, { useState } from 'react';
-import { FaUser, FaEnvelope, FaCommentDots } from 'react-icons/fa'; // Import required icons
+import { Mail, MessageSquare, User, Phone, Home, MapPin } from 'lucide-react';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
+    address: '',
+    subject: '',
     message: ''
   });
 
   const [errors, setErrors] = useState({});
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value
-    }));
-  };
-
   const validateForm = () => {
     const newErrors = {};
-
-    // Name validation
-    if (!formData.name.trim()) {
-      newErrors.name = 'Name is required';
-    }
-
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email is required';
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Invalid email format';
-    }
+    const phoneRegex = /^\+?[\d\s-]{10,}$/;
 
-    // Message validation
-    if (!formData.message.trim()) {
-      newErrors.message = 'Message is required';
-    }
+    if (!formData.name.trim()) newErrors.name = 'Name required';
+    if (!formData.email.trim()) newErrors.email = 'Email required';
+    if (!emailRegex.test(formData.email)) newErrors.email = 'Invalid email';
+    if (!formData.phone.trim()) newErrors.phone = 'Phone required';
+    if (!phoneRegex.test(formData.phone)) newErrors.phone = 'Invalid phone';
+    if (!formData.message.trim()) newErrors.message = 'Message required';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -45,89 +31,91 @@ const ContactForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (validateForm()) {
       console.log('Form submitted:', formData);
       setFormData({
         name: '',
         email: '',
+        phone: '',
+        address: '',
+        subject: '',
         message: ''
       });
-      alert('Thank you for your message!');
+      alert('Thank you for your message! We will contact you soon.');
     }
   };
 
+  const InputField = ({ icon: Icon, ...props }) => (
+    <div className="relative flex flex-col">
+      <div className="relative">
+        <Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" size={18} />
+        <input
+          {...props}
+          className={`w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+            ${errors[props.name] ? 'border-red-500' : 'border-gray-300'}`}
+          value={formData[props.name]}
+          onChange={(e) => setFormData({ ...formData, [props.name]: e.target.value })}
+        />
+      </div>
+      {errors[props.name] && (
+        <p className="text-red-500 text-sm mt-1 absolute top-full left-0">{errors[props.name]}</p>
+      )}
+    </div>
+  );
+
   return (
-    <div className="max-w-md mx-auto my-6 p-6 bg-white shadow-md rounded-lg">
-      <h2 className="text-2xl font-bold mb-6 text-center">Contact Us</h2>
-      <form onSubmit={handleSubmit}>
-        {/* Name Input */}
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700 mb-2">
-            Name
-          </label>
-          <div className="relative">
-            <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              type="text"
-              id="name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              className={`w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none 
-                ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
-              placeholder="Your Name"
-            />
-            {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
-          </div>
+    <div className="max-w-xl mx-auto my-8 p-6 bg-white shadow-xl rounded-lg">
+      <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Contact Us</h2>
+      <p className="text-center text-gray-600 mb-8">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+
+      <form onSubmit={handleSubmit} className="space-y-8">
+        <div>
+          <label className="block text-gray-700 mb-2">Name</label>
+          <InputField icon={User} type="text" name="name" placeholder="Your Name" />
         </div>
 
-        {/* Email Input */}
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700 mb-2">
-            Email
-          </label>
-          <div className="relative">
-            <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" size={20} />
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              className={`w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none 
-                ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
-              placeholder="your@email.com"
-            />
-            {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
-          </div>
+        <div>
+          <label className="block text-gray-700 mb-2">Email</label>
+          <InputField icon={Mail} type="email" name="email" placeholder="your@email.com" />
         </div>
 
-        {/* Message Input */}
-        <div className="mb-4">
-          <label htmlFor="message" className="block text-gray-700 mb-2">
-            Message
-          </label>
+        <div>
+          <label className="block text-gray-700 mb-2">Phone</label>
+          <InputField icon={Phone} type="tel" name="phone" placeholder="+91 98765 43210" />
+        </div>
+
+        <div>
+          <label className="block text-gray-700 mb-2">Address</label>
+          <InputField icon={Home} type="text" name="address" placeholder="Your Address" />
+        </div>
+
+        <div>
+          <label className="block text-gray-700 mb-2">Subject</label>
+          <InputField icon={MapPin} type="text" name="subject" placeholder="Subject of your message" />
+        </div>
+
+        <div className="mb-6">
+          <label className="block text-gray-700 mb-2">Message</label>
           <div className="relative">
-            <FaCommentDots className="absolute left-3 top-3 text-gray-400" size={20} />
+            <MessageSquare className="absolute left-3 top-3 text-gray-400 z-10" size={18} />
             <textarea
-              id="message"
               name="message"
               value={formData.message}
-              onChange={handleChange}
+              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               rows="4"
-              className={`w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none resize-none 
+              className={`w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none
                 ${errors.message ? 'border-red-500' : 'border-gray-300'}`}
               placeholder="Your message..."
             ></textarea>
-            {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
+            {errors.message && (
+              <p className="text-red-500 text-sm mt-1 absolute">{errors.message}</p>
+            )}
           </div>
         </div>
 
-        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition duration-300"
+          className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-700 transition duration-300 font-medium"
         >
           Send Message
         </button>

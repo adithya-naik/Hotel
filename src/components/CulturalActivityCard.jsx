@@ -18,6 +18,7 @@ const CulturalActivityCard = ({
         <img 
           src={imageUrl || "/api/placeholder/400/240"} 
           alt={title} 
+          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRg..."
           className="w-full h-full object-cover"
         />
         {price && (

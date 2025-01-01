@@ -12,7 +12,7 @@ const EntertainmentPage = () => {
       time: "6:00 PM - 8:00 PM",
       participants: 25,
       price: 45,
-      imageUrl: "/path/to/dance-workshop-image.jpg"
+      imageUrl: "https://images.pexels.com/photos/1624487/pexels-photo-1624487.jpeg"
     },
     {
       id: 2,
@@ -23,7 +23,7 @@ const EntertainmentPage = () => {
       time: "10:00 AM - 1:00 PM",
       participants: 15,
       price: 30,
-      imageUrl: "/path/to/pottery-class-image.jpg"
+      imageUrl: "https://images.pexels.com/photos/2047397/pexels-photo-2047397.jpeg"
     },
     {
       id: 3,
@@ -34,7 +34,7 @@ const EntertainmentPage = () => {
       time: "3:00 PM - 5:30 PM",
       participants: 20,
       price: 40,
-      imageUrl: "/path/to/painting-workshop-image.jpg"
+      imageUrl: "https://images.pexels.com/photos/2203263/pexels-photo-2203263.jpeg"
     },
     {
       id: 4,
@@ -45,7 +45,7 @@ const EntertainmentPage = () => {
       time: "5:00 PM - 8:00 PM",
       participants: 12,
       price: 60,
-      imageUrl: "/path/to/cooking-class-image.jpg"
+      imageUrl: "https://images.pexels.com/photos/759909/pexels-photo-759909.jpeg"
     },
     {
       id: 5,
@@ -56,9 +56,10 @@ const EntertainmentPage = () => {
       time: "4:00 PM - 6:00 PM",
       participants: 30,
       price: 20,
-      imageUrl: "/path/to/music-session-image.jpg"
+      imageUrl: "https://images.pexels.com/photos/4496274/pexels-photo-4496274.jpeg"
     }
   ];
+  
 
   return (
     <div className="container mx-auto p-4">
