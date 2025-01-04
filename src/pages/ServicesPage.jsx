@@ -124,8 +124,9 @@ const ServiceCard = ({ service }) => {
             {service.available}
           </div>
           <div className="flex items-center font-semibold">
-            <DollarSign className="w-4 h-4" />
-            {service.price === 0 ? 'Complimentary' : service.price.toFixed(2)}
+            <p>
+            ₹{service.price === 0 ? 'Complimentary' : service.price.toFixed(2)} 
+            </p>
           </div>
         </div>
         

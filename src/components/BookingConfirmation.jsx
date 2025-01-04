@@ -116,7 +116,7 @@ const BookingPage = () => {
                   <option value="">Select Room Type</option>
                   {roomTypes.map(room => (
                     <option key={room.value} value={room.value}>
-                      {room.label} (${room.price}/night)
+                      {room.label} (₹{room.price}/night)
                     </option>
                   ))}
                 </select>
@@ -186,7 +186,7 @@ const BookingPage = () => {
             {/* Price Calculation */}
             <div className="bg-blue-50 p-4 rounded-lg">
               <h3 className="text-xl font-bold text-center">
-                Total Estimated Price: ${calculateTotalPrice()}
+                Total Estimated Price: ₹{calculateTotalPrice()}
               </h3>
             </div>
 

@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { 
+  Clock, 
+  CalendarClock, 
+  MapPin, 
+  Phone,
+  Mail,
+  Globe
+} from 'lucide-react';
+import FeaturedServices from '../components/FeaturedServices';
 
 function HomePage() {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
@@ -25,36 +34,6 @@ function HomePage() {
       text: "Perfect blend of comfort and luxury. The staff went above and beyond.",
       rating: 5,
       image: "https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg"
-    }
-  ];
-
-  const features = [
-    {
-      title: "Luxury Suites",
-      description: "Spacious rooms with premium amenities and breathtaking views",
-      icon: (
-        <svg className="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-        </svg>
-      )
-    },
-    {
-      title: "24/7 Concierge",
-      description: "Round-the-clock assistance for all your needs",
-      icon: (
-        <svg className="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-      )
-    },
-    {
-      title: "Fine Dining",
-      description: "Michelin-starred restaurant with innovative cuisine",
-      icon: (
-        <svg className="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-        </svg>
-      )
     }
   ];
 
@@ -92,20 +71,35 @@ function HomePage() {
       </div>
 
       {/* Features Section */}
-      <section className="py-20 bg-white">
+      <FeaturedServices />
+
+      {/* Quick Info Section */}
+      <section className="py-16 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-16">Exceptional Services</h2>
-          <div className="grid md:grid-cols-3 gap-12">
-            {features.map((feature, index) => (
-              <div key={index} 
-                   className="bg-white p-8 rounded-xl shadow-lg text-center transform hover:scale-105 transition duration-300">
-                <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
-                  {feature.icon}
-                </div>
-                <h3 className="text-2xl font-semibold mb-4">{feature.title}</h3>
-                <p className="text-gray-600">{feature.description}</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex items-center space-x-4 p-6 bg-gray-50 rounded-lg">
+              <Clock className="w-8 h-8 text-blue-600" />
+              <div>
+                <h3 className="font-semibold text-lg">Check-in/Check-out</h3>
+                <p className="text-gray-600">From 14:00 / Until 12:00</p>
               </div>
-            ))}
+            </div>
+            
+            <div className="flex items-center space-x-4 p-6 bg-gray-50 rounded-lg">
+              <CalendarClock className="w-8 h-8 text-blue-600" />
+              <div>
+                <h3 className="font-semibold text-lg">Early Check-in</h3>
+                <p className="text-gray-600">Subject to availability</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-4 p-6 bg-gray-50 rounded-lg">
+              <MapPin className="w-8 h-8 text-blue-600" />
+              <div>
+                <h3 className="font-semibold text-lg">Prime Location</h3>
+                <p className="text-gray-600">Central Business District</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -136,7 +130,7 @@ function HomePage() {
                 <div key={index} className="relative h-44 rounded-xl overflow-hidden group">
                   <img src={room.image} 
                        alt={room.title} 
-                       loading = "lazy"
+                       loading="lazy"
                        className="w-full h-full object-cover transform group-hover:scale-110 transition duration-500" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent">
                     <div className="absolute bottom-0 p-4">
@@ -149,10 +143,35 @@ function HomePage() {
           </div>
         </div>
         <div className='text-center my-auto mt-4 mb-0'>
-        <Link to="/rooms" 
+          <Link to="/rooms" 
                 className="bg-yellow-500 hover:bg-yellow-600 text-black px-8 py-4 rounded-lg text-lg font-semibold inline-block transition">
             Explore Rooms
           </Link>
+        </div>
+      </section>
+
+      {/* Awards & Recognition Section */}
+      <section className="py-16 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">Awards & Recognition</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+            <div className="p-6">
+              <div className="text-4xl font-bold text-blue-600 mb-2">2024</div>
+              <p className="text-gray-700">Best Luxury Hotel</p>
+            </div>
+            <div className="p-6">
+              <div className="text-4xl font-bold text-blue-600 mb-2">5★</div>
+              <p className="text-gray-700">Forbes Rating</p>
+            </div>
+            <div className="p-6">
+              <div className="text-4xl font-bold text-blue-600 mb-2">#1</div>
+              <p className="text-gray-700">In Customer Service</p>
+            </div>
+            <div className="p-6">
+              <div className="text-4xl font-bold text-blue-600 mb-2">9.8</div>
+              <p className="text-gray-700">Guest Rating</p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -199,6 +218,35 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Contact Information Section */}
+      {/* <section className="py-16 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="flex items-center space-x-4">
+              <Phone className="w-6 h-6 text-blue-600" />
+              <div>
+                <h3 className="font-semibold">Call Us</h3>
+                <p className="text-gray-600">+1 (555) 123-4567</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Mail className="w-6 h-6 text-blue-600" />
+              <div>
+                <h3 className="font-semibold">Email Us</h3>
+                <p className="text-gray-600">info@luxuryhotel.com</p>
+              </div>
+            </div>
+            <div className="flex items-center space-x-4">
+              <Globe className="w-6 h-6 text-blue-600" />
+              <div>
+                <h3 className="font-semibold">Location</h3>
+                <p className="text-gray-600">123 Luxury Ave, City</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section> */}
 
       {/* CTA Section */}
       <section className="relative py-20 bg-cover bg-center" 

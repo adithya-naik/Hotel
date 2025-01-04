@@ -21,7 +21,7 @@ const Navbar = () => {
           <svg className="w-8 h-8 mr-2" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M12.395 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.5A1 1 0 009 15.5V11a1 1 0 112 0v4.5a1 1 0 00.757.97l5 1.5a1 1 0 001.169-1.409l-7-14z" clipRule="evenodd" />
           </svg>
-          Hotel & Restaurant
+          myiStay
         </Link>
         
         {/* Mobile Menu Toggle */}

@@ -222,7 +222,10 @@ const rooms = [
 
 const RoomsPage = () => {
   const [selectedAmenity, setSelectedAmenity] = useState('all');
+  const [collapse, setCollapse] = useState(false);
+  
   const amenities = ['all', ...new Set(rooms.flatMap(room => room.amenities))];
+  const amenitiesToShow  = collapse ? amenities : amenities.slice(0,10)
 
   const filteredRooms = selectedAmenity === 'all' 
     ? rooms 
@@ -235,9 +238,9 @@ const RoomsPage = () => {
         <p className="text-gray-600 text-center mb-8 max-w-2xl mx-auto">
           Experience luxury and comfort in our carefully designed rooms and suites
         </p>
-        
+        <div className='flex flex-row'>
         <div className="flex flex-wrap justify-center gap-2 mb-8">
-          {amenities.map((amenity) => (
+          {amenitiesToShow.map((amenity) => (
             <button
               key={amenity}
               onClick={() => setSelectedAmenity(amenity)}
@@ -250,7 +253,16 @@ const RoomsPage = () => {
               {amenity.charAt(0).toUpperCase() + amenity.slice(1)}
             </button>
           ))}
-        </div>
+        {/* <div> */}
+        <span 
+          onClick={() => setCollapse(!collapse)} // Toggle collapse state
+          className="px-4 py-2 rounded-full text-sm bg-gray-900 text-white cursor-pointer font-medium transition-all duration-300 transform hover:scale-105"
+          >
+          {!collapse ? 'Show All' : 'Hide'}
+        </span>
+          </div>
+        {/* </div> */}
+</div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 ">
           {filteredRooms.map((room) => (

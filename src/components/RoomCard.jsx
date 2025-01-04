@@ -23,7 +23,6 @@ const RoomCard = ({ room }) => {
         <img
           src={room.image}
           alt={room.name}
-          blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRg..."
           loading = "lazy"
           className="w-full h-full object-cover transform hover:scale-105 transition-all duration-500"
         />
@@ -38,7 +37,7 @@ const RoomCard = ({ room }) => {
         <p className="text-gray-600 mb-4">{room.description}</p>
         <div className="flex items-center justify-between">
           <div>
-            <span className="text-3xl font-bold text-blue-600">${room.price}</span>
+            <span className="text-3xl font-bold text-blue-600">₹{room.price}</span>
             <span className="text-gray-500">/night</span>
           </div>
           <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg transition-colors duration-300 transform hover:scale-105">

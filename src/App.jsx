@@ -10,12 +10,14 @@ import EntertainmentPage from './pages/EntertainmentPage';
 import BookingPage from './pages/BookingPage';
 import TestimonialsPage from './pages/TestimonialsPage';
 import ContactPage from './pages/ContactPage';
+import FeaturedServices from './components/FeaturedServices'
 
 function App() {
   return (
     <Router>
       <div className="flex flex-col min-h-screen">
         <Navbar />
+        {/* <FeaturedServices></FeaturedServices> */}
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<HomePage />} />

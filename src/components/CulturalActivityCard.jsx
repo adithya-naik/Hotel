@@ -22,9 +22,9 @@ const CulturalActivityCard = ({
           className="w-full h-full object-cover"
         />
         {price && (
-          <div className="absolute top-3 right-3 bg-white/80 px-3 py-1 rounded-full flex items-center">
-            <FaTicketAlt size={16} className="mr-2 text-blue-600" />
-            <span className="font-semibold text-gray-800">${price}</span>
+          <div className="absolute top-3 right-3 bg-black/80 px-3 py-1 rounded-full flex items-center">
+            <FaTicketAlt size={16} className="mr-2 text-white" />
+            <span className="font-semibold text-white">₹{price}</span>
           </div>
         )}
       </div>
@@ -37,20 +37,20 @@ const CulturalActivityCard = ({
         {/* Activity Meta Information */}
         <div className="space-y-2">
           <div className="flex items-center text-gray-600">
-            <FaCalendarAlt size={18} className="mr-2 text-blue-500" />
+            <FaCalendarAlt size={18} className="mr-2 text-gray-500" />
             <span>{date}</span>
           </div>
           <div className="flex items-center text-gray-600">
-            <FaMapMarkerAlt size={18} className="mr-2 text-red-500" />
+            <FaMapMarkerAlt size={18} className="mr-2 text-gray-500" />
             <span>{location}</span>
           </div>
           <div className="flex items-center text-gray-600">
-            <FaClock size={18} className="mr-2 text-green-500" />
+            <FaClock size={18} className="mr-2 text-gray-500" />
             <span>{time}</span>
           </div>
           {participants && (
             <div className="flex items-center text-gray-600">
-              <FaUsers size={18} className="mr-2 text-purple-500" />
+              <FaUsers size={18} className="mr-2 text-gray-500" />
               <span>{participants} Participants</span>
             </div>
           )}
