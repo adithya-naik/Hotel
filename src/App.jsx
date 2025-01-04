@@ -12,9 +12,15 @@ import TestimonialsPage from './pages/TestimonialsPage';
 import ContactPage from './pages/ContactPage';
 import FeaturedServices from './components/FeaturedServices'
 
-function App() {
+import ScrollToTop from './components/ScrollToTop.jsx';
+
+function App() { 
+ window.onbeforeunload = function () {
+    window.scrollTo(0, 0);
+  };
   return (
     <Router>
+      <ScrollToTop />
       <div className="flex flex-col min-h-screen">
         <Navbar />
         {/* <FeaturedServices></FeaturedServices> */}
