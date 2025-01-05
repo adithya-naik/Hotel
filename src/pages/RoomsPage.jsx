@@ -11,7 +11,7 @@ const RoomsPage = () => {
   useEffect(() => {
     const fetchRooms = async () => {
       try {
-        const response = await fetch('http://localhost/backend.myistay/fetch_rooms.php');
+        const response = await fetch('https://myistay.freewebhostmost.com/fetch_rooms.php');
         const text = await response.text(); // Get raw response
         console.log('Raw response:', text); // Log it to console
         
