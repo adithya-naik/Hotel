@@ -30,7 +30,7 @@ const Footer = () => {
             <li>Yamnampet</li>
             <li>Hyderabad, Telangana</li>
             <li>Phone: +91 9955886633</li>
-            <li>Email: info@myistay.com</li>
+            <li>Email: info.myistay@gmail.com</li>
           </ul>
         </div>
         
