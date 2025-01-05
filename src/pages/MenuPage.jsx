@@ -1,17 +1,4 @@
-// import React from 'react';
-// import MenuCategory from '../components/MenuCategory';
-
-// const MenuPage = () => {
-//   return (
-//     <div className="container mx-auto p-4">
-//       <MenuCategory />
-//     </div>
-//   );
-// };
-
-// export default MenuPage;
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const MenuPage = () => {
   const categories = [
@@ -21,115 +8,42 @@ const MenuPage = () => {
     { id: 4, name: 'Desserts', icon: '🍰' }
   ];
 
-  const menuItems = [
-    {
-      id: 1,
-      name: 'Classic Burger',
-      description: 'Juicy beef burger with lettuce, tomato, and cheese',
-      price: 10.99,
-      category: 'Mains',
-      imageUrl: 'https://images.pexels.com/photos/1633578/pexels-photo-1633578.jpeg',
-      tags: ['Popular', 'Spicy']
-    },
-    {
-      id: 2,
-      name: 'Margherita Pizza',
-      description: 'Classic pizza with fresh basil and mozzarella',
-      price: 12.99,
-      category: 'Mains',
-      imageUrl: 'https://images.pexels.com/photos/2232/vegetables-italian-pizza-restaurant.jpg',
-      tags: ['Vegetarian']
-    },
-    {
-      id: 3,
-      name: 'Garden Salad',
-      description: 'Mixed greens with cherry tomatoes and balsamic',
-      price: 8.99,
-      category: 'Salads',
-      imageUrl: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg',
-      tags: ['Vegan', 'Healthy']
-    },
-    {
-      id: 4,
-      name: 'Tiramisu',
-      description: 'Classic Italian dessert with coffee and mascarpone',
-      price: 6.99,
-      category: 'Desserts',
-      imageUrl: 'https://images.pexels.com/photos/247685/pexels-photo-247685.jpeg',
-      tags: ['Popular']
-    },
-    {
-      id: 5,
-      name: 'Cheeseburger',
-      description: 'Cheddar cheese burger with pickles and onions',
-      price: 11.99,
-      category: 'Mains',
-      imageUrl: 'https://images.pexels.com/photos/1845288/pexels-photo-1845288.jpeg',
-      tags: ['Popular']
-    },
-    {
-      id: 6,
-      name: 'Spaghetti Carbonara',
-      description: 'Classic pasta with creamy carbonara sauce and pancetta',
-      price: 13.49,
-      category: 'Mains',
-      imageUrl: 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg',
-      tags: ['Italian']
-    },
-    {
-      id: 7,
-      name: 'Caesar Salad',
-      description: 'Crispy romaine with Caesar dressing and croutons',
-      price: 9.99,
-      category: 'Salads',
-      imageUrl: 'https://images.pexels.com/photos/4197494/pexels-photo-4197494.jpeg',
-      tags: ['Vegetarian']
-    },
-    {
-      id: 8,
-      name: 'Chicken Wings',
-      description: 'Crispy wings with spicy buffalo sauce',
-      price: 7.49,
-      category: 'Starters',
-      imageUrl: 'https://images.pexels.com/photos/533325/pexels-photo-533325.jpeg',
-      tags: ['Popular', 'Spicy']
-    },
-    {
-      id: 9,
-      name: 'BBQ Ribs',
-      description: 'Tender ribs with smoky barbecue sauce',
-      price: 16.99,
-      category: 'Mains',
-      imageUrl: 'https://images.pexels.com/photos/1565982/pexels-photo-1565982.jpeg',
-      tags: ['Popular']
-    },
-    {
-      id: 10,
-      name: 'Fish and Chips',
-      description: 'Crispy battered fish with fries',
-      price: 14.49,
-      category: 'Mains',
-      imageUrl: 'https://images.pexels.com/photos/2955822/pexels-photo-2955822.jpeg',
-      tags: ['Seafood']
-    },
-    {
-      id: 11,
-      name: 'Vegan Burger',
-      description: 'Plant-based patty with lettuce, tomato, and avocado',
-      price: 11.49,
-      category: 'Mains',
-      imageUrl: 'https://images.pexels.com/photos/1437267/pexels-photo-1437267.jpeg',
-      tags: ['Vegan']
-    }
-    // Add more items as needed
-  ];
-  
-
+  const [menuItems, setMenuItems] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch menu items from the backend
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try {
+        const response = await fetch('http://localhost/backend.myistay/fetch_menuItems.php');
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        setMenuItems(data);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMenuItems();
+  }, []);
 
   const filteredItems = menuItems.filter(item =>
     selectedCategory === 'All' ? true : item.category === selectedCategory
   );
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -171,7 +85,7 @@ const MenuPage = () => {
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
                   <span className="text-lg font-bold text-blue-600">
-                  ₹{item.price.toFixed(2)}
+                    ₹{item.price}
                   </span>
                 </div>
                 <p className="text-gray-600 mb-4">{item.description}</p>

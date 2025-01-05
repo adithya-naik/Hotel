@@ -1,64 +1,83 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Mail, MessageSquare, User, Phone, Home, MapPin } from 'lucide-react';
 
 const ContactForm = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    address: '',
-    subject: '',
-    message: ''
-  });
+  const nameRef = useRef();
+  const emailRef = useRef();
+  const phoneRef = useRef();
+  const addressRef = useRef();
+  const subjectRef = useRef();
+  const messageRef = useRef();
 
   const [errors, setErrors] = useState({});
 
   const validateForm = () => {
     const newErrors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^\+?[\d\s-]{10,}$/;
 
-    if (!formData.name.trim()) newErrors.name = 'Name required';
-    if (!formData.email.trim()) newErrors.email = 'Email required';
-    if (!emailRegex.test(formData.email)) newErrors.email = 'Invalid email';
-    if (!formData.phone.trim()) newErrors.phone = 'Phone required';
-    if (!phoneRegex.test(formData.phone)) newErrors.phone = 'Invalid phone';
-    if (!formData.message.trim()) newErrors.message = 'Message required';
+    if (!nameRef.current.value.trim()) newErrors.name = 'Name required';
+    if (!emailRef.current.value.trim()) newErrors.email = 'Email required';
+    if (!emailRegex.test(emailRef.current.value)) newErrors.email = 'Invalid email';
+    if (!messageRef.current.value.trim()) newErrors.message = 'Message required';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log('Form submitted:', formData);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        address: '',
-        subject: '',
-        message: ''
-      });
-      alert('Thank you for your message! We will contact you soon.');
+      const formData = {
+        name: nameRef.current.value,
+        email: emailRef.current.value,
+        phone: phoneRef.current.value,
+        address: addressRef.current.value,
+        subject: subjectRef.current.value,
+        message: messageRef.current.value,
+      };
+
+      try {
+        const response = await fetch('http://localhost/backend.myistay/add_ToContactForm.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(formData),
+        });
+
+        if (response.ok) {
+          alert('Thank you for your message! We will contact you soon.');
+          
+          // Clear form fields
+          nameRef.current.value = '';
+          emailRef.current.value = '';
+          phoneRef.current.value = '';
+          addressRef.current.value = '';
+          subjectRef.current.value = '';
+          messageRef.current.value = '';
+          setErrors({});
+        } else {
+          alert('Failed to submit the form. Please try again later.');
+        }
+      } catch (error) {
+        alert('An error occurred. Please try again.');
+      }
     }
   };
 
-  const InputField = ({ icon: Icon, ...props }) => (
+  const InputField = ({ icon: Icon, refProp, name, placeholder, type }) => (
     <div className="relative flex flex-col">
       <div className="relative">
         <Icon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 z-10" size={18} />
         <input
-          {...props}
+          ref={refProp}
+          type={type}
+          name={name}
+          placeholder={placeholder}
           className={`w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
-            ${errors[props.name] ? 'border-red-500' : 'border-gray-300'}`}
-          value={formData[props.name]}
-          onChange={(e) => setFormData({ ...formData, [props.name]: e.target.value })}
+            ${errors[name] ? 'border-red-500' : 'border-gray-300'}`}
         />
       </div>
-      {errors[props.name] && (
-        <p className="text-red-500 text-sm mt-1 absolute top-full left-0">{errors[props.name]}</p>
+      {errors[name] && (
+        <p className="text-red-500 text-sm mt-1 absolute top-full left-0">{errors[name]}</p>
       )}
     </div>
   );
@@ -66,32 +85,34 @@ const ContactForm = () => {
   return (
     <div className="max-w-xl mx-auto my-8 p-6 bg-white shadow-xl rounded-lg">
       <h2 className="text-3xl font-bold mb-6 text-center text-gray-800">Contact Us</h2>
-      <p className="text-center text-gray-600 mb-8">We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+      <p className="text-center text-gray-600 mb-8">
+        We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+      </p>
 
       <form onSubmit={handleSubmit} className="space-y-8">
         <div>
           <label className="block text-gray-700 mb-2">Name</label>
-          <InputField icon={User} type="text" name="name" placeholder="Your Name" />
+          <InputField icon={User} refProp={nameRef} name="name" placeholder="Your Name" type="text" />
         </div>
 
         <div>
           <label className="block text-gray-700 mb-2">Email</label>
-          <InputField icon={Mail} type="email" name="email" placeholder="your@email.com" />
+          <InputField icon={Mail} refProp={emailRef} name="email" placeholder="your@email.com" type="email" />
         </div>
 
         <div>
           <label className="block text-gray-700 mb-2">Phone</label>
-          <InputField icon={Phone} type="tel" name="phone" placeholder="+91 98765 43210" />
+          <InputField icon={Phone} refProp={phoneRef} name="phone" placeholder="+91 98765 43210" type="tel" />
         </div>
 
         <div>
           <label className="block text-gray-700 mb-2">Address</label>
-          <InputField icon={Home} type="text" name="address" placeholder="Your Address" />
+          <InputField icon={Home} refProp={addressRef} name="address" placeholder="Your Address" type="text" />
         </div>
 
         <div>
           <label className="block text-gray-700 mb-2">Subject</label>
-          <InputField icon={MapPin} type="text" name="subject" placeholder="Subject of your message" />
+          <InputField icon={MapPin} refProp={subjectRef} name="subject" placeholder="Subject of your message" type="text" />
         </div>
 
         <div className="mb-6">
@@ -99,9 +120,8 @@ const ContactForm = () => {
           <div className="relative">
             <MessageSquare className="absolute left-3 top-3 text-gray-400 z-10" size={18} />
             <textarea
+              ref={messageRef}
               name="message"
-              value={formData.message}
-              onChange={(e) => setFormData({ ...formData, message: e.target.value })}
               rows="4"
               className={`w-full pl-10 pr-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none
                 ${errors.message ? 'border-red-500' : 'border-gray-300'}`}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const BookingPage = () => {
   const [bookingData, setBookingData] = useState({
@@ -9,24 +9,18 @@ const BookingPage = () => {
     checkIn: '',
     checkOut: '',
     guests: 1,
-    specialRequests: ''
+    specialRequests: '',
+    totalPrice: 0,
   });
 
   const roomTypes = [
     { value: 'standard', label: 'Standard Room', price: 100 },
     { value: 'deluxe', label: 'Deluxe Room', price: 200 },
+    { value: 'family', label: 'Family Room', price: 250 },
     { value: 'suite', label: 'Executive Suite', price: 350 },
-    { value: 'family', label: 'Family Room', price: 250 }
   ];
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setBookingData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
+  // Calculate total price based on room type, number of nights, and guests
   const calculateTotalPrice = () => {
     const selectedRoom = roomTypes.find(room => room.value === bookingData.roomType);
     if (!selectedRoom || !bookingData.checkIn || !bookingData.checkOut) return 0;
@@ -38,28 +32,60 @@ const BookingPage = () => {
     return selectedRoom.price * nights * bookingData.guests;
   };
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    const totalPrice = calculateTotalPrice();
+    setBookingData(prev => ({ ...prev, totalPrice }));
+  }, [bookingData.roomType, bookingData.checkIn, bookingData.checkOut, bookingData.guests]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setBookingData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Here you would typically send the booking data to a backend service
-    console.log('Booking Submitted:', bookingData);
-    alert('Booking Submitted Successfully!');
+
+    try {
+      const response = await fetch('http://localhost/backend.myistay/add_ToBookings.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bookingData),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        alert(result.message || 'Booking submitted successfully!');
+        setBookingData({
+          name: '',
+          email: '',
+          phone: '',
+          roomType: '',
+          checkIn: '',
+          checkOut: '',
+          guests: 1,
+          specialRequests: '',
+          totalPrice: 0,
+        });
+      } else {
+        const error = await response.json();
+        alert(error.error || 'There was an error with your booking.');
+      }
+    } catch (err) {
+      alert('Failed to submit booking: ' + err.message);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 py-12 px-4">
       <div className="container mx-auto max-w-4xl bg-white shadow-lg rounded-lg overflow-hidden">
         <div className="p-8">
-          <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">
-            Book Your Stay
-          </h1>
-
+          <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Book Your Stay</h1>
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Personal Information */}
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Full Name
-                </label>
+                <label className="block text-gray-700 font-semibold mb-2">Full Name</label>
                 <input
                   type="text"
                   name="name"
@@ -67,13 +93,10 @@ const BookingPage = () => {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter your full name"
                 />
               </div>
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Email Address
-                </label>
+                <label className="block text-gray-700 font-semibold mb-2">Email Address</label>
                 <input
                   type="email"
                   name="email"
@@ -81,17 +104,13 @@ const BookingPage = () => {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter your email"
                 />
               </div>
             </div>
 
-            {/* Contact and Room Details */}
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Phone Number
-                </label>
+                <label className="block text-gray-700 font-semibold mb-2">Phone Number</label>
                 <input
                   type="tel"
                   name="phone"
@@ -99,13 +118,10 @@ const BookingPage = () => {
                   onChange={handleChange}
                   required
                   className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="Enter your phone number"
                 />
               </div>
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Room Type
-                </label>
+                <label className="block text-gray-700 font-semibold mb-2">Room Type</label>
                 <select
                   name="roomType"
                   value={bookingData.roomType}
@@ -123,12 +139,9 @@ const BookingPage = () => {
               </div>
             </div>
 
-            {/* Dates and Guests */}
             <div className="grid md:grid-cols-3 gap-6">
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Check-In Date
-                </label>
+                <label className="block text-gray-700 font-semibold mb-2">Check-In Date</label>
                 <input
                   type="date"
                   name="checkIn"
@@ -139,9 +152,7 @@ const BookingPage = () => {
                 />
               </div>
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Check-Out Date
-                </label>
+                <label className="block text-gray-700 font-semibold mb-2">Check-Out Date</label>
                 <input
                   type="date"
                   name="checkOut"
@@ -152,9 +163,7 @@ const BookingPage = () => {
                 />
               </div>
               <div>
-                <label className="block text-gray-700 font-semibold mb-2">
-                  Number of Guests
-                </label>
+                <label className="block text-gray-700 font-semibold mb-2">Number of Guests</label>
                 <input
                   type="number"
                   name="guests"
@@ -168,29 +177,23 @@ const BookingPage = () => {
               </div>
             </div>
 
-            {/* Special Requests */}
             <div>
-              <label className="block text-gray-700 font-semibold mb-2">
-                Special Requests
-              </label>
+              <label className="block text-gray-700 font-semibold mb-2">Special Requests</label>
               <textarea
                 name="specialRequests"
                 value={bookingData.specialRequests}
                 onChange={handleChange}
                 rows="4"
                 className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Any special requirements or requests?"
               ></textarea>
             </div>
 
-            {/* Price Calculation */}
             <div className="bg-blue-50 p-4 rounded-lg">
               <h3 className="text-xl font-bold text-center">
-                Total Estimated Price: ₹{calculateTotalPrice()}
+                Total Estimated Price: ₹{bookingData.totalPrice}
               </h3>
             </div>
 
-            {/* Submit Button */}
             <div className="text-center">
               <button
                 type="submit"
