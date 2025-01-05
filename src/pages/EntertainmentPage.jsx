@@ -9,7 +9,7 @@ const EntertainmentPage = () => {
   useEffect(() => {
     const fetchActivities = async () => {
       try {
-        const response = await fetch('http://localhost/backend.myistay/fetch_entertrainments.php');
+        const response = await fetch('https://myistay.freewebhostmost.com/fetch_entertrainments.php');
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }

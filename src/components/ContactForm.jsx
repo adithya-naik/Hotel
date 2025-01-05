@@ -37,7 +37,7 @@ const ContactForm = () => {
       };
 
       try {
-        const response = await fetch('http://localhost/backend.myistay/add_ToContactForm.php', {
+        const response = await fetch('https://myistay.freewebhostmost.com/add_ToContactForm.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData),

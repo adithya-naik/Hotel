@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Search, Star, Clock } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Search, Star, Clock } from "lucide-react";
 
 // ServiceCard Component
 const ServiceCard = ({ service }) => {
@@ -12,7 +12,7 @@ const ServiceCard = ({ service }) => {
           className="w-full h-48 object-cover"
         />
       </div>
-      
+
       <div className="p-6">
         <div className="flex justify-between items-start mb-2">
           <h3 className="text-xl font-bold text-gray-900">{service.name}</h3>
@@ -21,21 +21,19 @@ const ServiceCard = ({ service }) => {
             <span className="ml-1 text-sm text-gray-600">{service.rating}</span>
           </div>
         </div>
-        
+
         <p className="text-gray-600 mb-4">{service.description}</p>
-        
+
         <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
           <div className="flex items-center">
             <Clock className="w-4 h-4 mr-1" />
             {service.available}
           </div>
           <div className="flex items-center font-semibold">
-            <p>
-              ₹{service.price === 0 ? 'Complimentary' : service.price}
-            </p>
+            <p>₹{service.price === 0 ? "Complimentary" : service.price}</p>
           </div>
         </div>
-        
+
         <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
           Book Now
         </button>
@@ -45,17 +43,17 @@ const ServiceCard = ({ service }) => {
 };
 
 const ServicesPage = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   // Fetch data from API on component mount
   useEffect(() => {
-    fetch('http://localhost/backend.myistay/fetch_services.php') // Replace with the correct API URL
+    fetch("https://myistay.freewebhostmost.com/fetch_services.php") // Replace with the correct API URL
       .then((response) => {
         if (!response.ok) {
-          throw new Error('Failed to fetch services');
+          throw new Error("Failed to fetch services");
         }
         return response.json();
       })
@@ -70,9 +68,10 @@ const ServicesPage = () => {
   }, []);
 
   // Filter services based on search term
-  const filteredServices = services.filter(service =>
-    service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    service.description.toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredServices = services.filter(
+    (service) =>
+      service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.description.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   if (loading) {
@@ -86,9 +85,13 @@ const ServicesPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center text-gray-900 mb-4">Hotel Services</h1>
-        <p className="text-center text-gray-600 mb-8">Experience luxury and comfort with our premium services</p>
-        
+        <h1 className="text-4xl font-bold text-center text-gray-900 mb-4">
+          Hotel Services
+        </h1>
+        <p className="text-center text-gray-600 mb-8">
+          Experience luxury and comfort with our premium services
+        </p>
+
         <div className="relative mb-8 max-w-md mx-auto">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
           <input

@@ -46,7 +46,7 @@ const BookingPage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('http://localhost/backend.myistay/add_ToBookings.php', {
+      const response = await fetch('https://myistay.freewebhostmost.com/add_ToBookings.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

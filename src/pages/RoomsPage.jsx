@@ -296,7 +296,7 @@ const RoomsPage = () => {
 
   // Fetch room data from API on component mount
   useEffect(() => {
-    fetch('http://localhost/backend.myistay/fetch_rooms.php')  // Replace with the correct path
+    fetch('https://myistay.freewebhostmost.com/fetch_rooms.php')  // Replace with the correct path
       .then((response) => response.json())  // Parse the JSON response
       .then((data) => {
         setRooms(data);  // Set room data in state

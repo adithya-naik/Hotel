@@ -17,7 +17,7 @@ const MenuPage = () => {
   useEffect(() => {
     const fetchMenuItems = async () => {
       try {
-        const response = await fetch('http://localhost/backend.myistay/fetch_menuItems.php');
+        const response = await fetch('https://myistay.freewebhostmost.com/fetch_menuItems.php');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
